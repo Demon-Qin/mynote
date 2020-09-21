@@ -86,3 +86,4 @@ git push origin ：dev
 
 （这样算删除成功）
 
+git pull    i     wq
