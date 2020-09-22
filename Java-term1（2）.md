@@ -21,6 +21,21 @@
 ```
 
 
+
+### 自定义方法
+
+
+```java
+ public void feed(Pet pet, String food) {
+	   
+   //System.out.println("-----------");
+   System.out.println(this.getName()+"喂给");
+   pet.eatSomething(food);
+   pet.print();
+      }
+```
+
+
 ### Java 子类继承父类
 
 
@@ -143,6 +158,132 @@ Bus继承Car
 
 
 
+
+### 接口
+
+接口
+```java
+public interface Graphics {
+	 
+void show();
+}
+```
+
+```java
+public class Triangle implements Graphics{
+      public void show() {
+    	  System.out.println("这是三角形");
+      }
+}
+```
+
+```java
+public class TestInterface {
+	public static void main(String[] args) {
+        Graphics triangle =new Triangle();
+        triangle.show();
+    }
+
+}
+```
+
+
+
+
+
+### Dao
+
+![1600750583878](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\1600750583878.png)
+
+Dao  接口       Daoimpl具体写接口  entity用接口
+
+
+
+### 连接数据库
+
+
+```java
+public static Connection getConnection() throws ClassNotFoundException, SQLException{
+		
+   Class.forName("com.mysql.jdbc.Driver");
+	
+	String url="jdbc:mysql://localhost:3306/myjava";
+	
+	Connection connection=null;
+	PreparedStatement statement=null;
+	connection=DriverManager.getConnection(url, "root", "123456");
+	/*System.out.println(connection);*/
+	
+	return connection;
+}
+
+public static void closeResource(Connection connection,Statement statement){
+	if (statement != null) {
+		try {
+			statement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	if (connection != null) {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+}
+
+```
+
+
+###  dao中的  add（） delete（） getbyId（）
+
+```java
+@Override
+public int add(StudentManage student) {
+		// TODO Auto-generated method stub
+		
+		int code = 0;
+		String sql = "insert into students (id,name,age,mark) values(?,?,?,?)";
+        code = DBUtils.update(sql, student.getId(),
+        		                 student.getName(),
+        		                 student.getAge(),
+        		                 student.getMark());
+		System.out.println(code);
+		return code;
+	}
+
+	@Override
+	public int delete(StudentManage student) {
+		// TODO Auto-generated method stub
+		 int code=0;
+	        String sql="delete from students where id=?";
+	        code=DBUtils.update(sql,student.getId());
+		return code;
+	}
+
+	@Override
+	public List<StudentManage> getById(int age) {
+		// TODO Auto-generated method stub
+		String sql="select*from students where age=?";
+        List<StudentManage> studentList= new ArrayList<>();
+        List<Map<String,Object>> mapList=DBUtils.query(sql,new Integer(age));
+        for (Map<String,Object>map:mapList){
+            StudentManage student=new StudentManage();
+            student.setId((Integer)(map.get("id")));
+            student.setName((String) (map.get("name")));
+            student.setMark((Integer) (map.get("mark")));
+            student.setAge((Integer)(map.get("age")));
+            studentList.add(student);
+        }
+        return studentList;
+    }
+```
 
 ### 异常处理
 
@@ -284,3 +425,307 @@ public static void main(String[] args) {
 
 
 ![1600674616094](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\1600674616094.png)
+
+###  ArrayList
+
+1.定义一个类
+
+2.
+
+
+
+```java
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+public class PenguinsArrayList {
+	  public static void main(String[] args) {
+	       
+        List<Penguin> penguinslist = new ArrayList<>();
+        Penguin penguin1 = new Penguin("企鹅1", 6, "帝企鹅");
+        Penguin penguin2 = new Penguin("企鹅2", 7, "阿德利企鹅");
+        Penguin penguin3 = new Penguin("企鹅3", 8, "金图企鹅");
+        penguinslist.add(penguin1);
+        penguinslist.add(penguin2);
+        penguinslist.add(penguin3);
+        Iterator <Penguin>iterator = penguinslist.iterator();
+            
+            while (iterator.hasNext()) {
+                Penguin pentemp = iterator.next();
+                System.out.println(pentemp);
+                }
+            if(penguinslist.contains(penguin1)){
+                System.out.println("企鹅1在list中了，我已经将其删掉");
+                penguinslist.remove(0);
+            }else{
+                System.out.println("企鹅1已经不在list中了");
+            
+            }
+            System.out.println(penguinslist.size());
+            for(int i=0;i<penguinslist.size();i++){
+                System.out.println(penguinslist.get(i));
+            }
+        }
+    }
+```
+
+
+
+### Hashmap
+
+
+
+![img](file:///C:\Users\admin\Documents\Tencent Files\1792357514\Image\C2C\311FFC65BE800FE22507645F4FF74207.jpg)
+
+
+
+###  线程
+
+```java
+class Thread1 extends Thread{
+	public void run() {
+		System.out.println("1到100中的偶数：");
+		for(int i =2; i<=100 ;i+=2) {
+			System.out.println(i);
+		}
+	}
+	
+}
+class Thread2 extends Thread{
+	public void run() {
+		System.out.println("1到100中的奇数：");
+		for(int i =1; i<=100 ;i+=2) {
+			System.out.println(i);
+		}
+	}
+	
+}
+
+public class TestThread {
+	public static void main(String[] args) {
+		Thread1 t1 = new Thread1();
+		Thread2 t2 = new Thread2();
+		t1.start();
+		t2.start();
+	}
+
+}
+```
+
+
+
+```java
+class Run implements Runnable {
+@Override
+public void run() {
+	System.out.println("1到100中的偶数：");
+	for(int i =2; i<=100 ;i+=2) {
+		System.out.println(i);
+	}
+}
+}
+public class TestRun{
+	public static void main(String[] args) {
+		Run run1 = new Run();
+		Thread th1 = new Thread(run1,"子线程");
+		th1.start();
+		System.out.println("1到100中的奇数：");
+		for(int i =1; i<=100 ;i+=2) {
+			System.out.println(i);
+			}
+			}
+		}
+```
+
+
+```java
+class ExpertRegistration {
+	private int count = 1;
+public int getCount() {
+	return count;
+}
+
+public void setCount(int count) {
+	this.count = count;
+}
+
+public void register() {
+	while (true) {
+		synchronized (this) {
+			if (count > 40) {
+				System.out.println("专家号已挂完！");
+				break;
+			} else {
+				System.out.println(Thread.currentThread().getName() + "挂出的第 " + (count++) + " 个专家号");
+			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+}
+    }
+
+class RegisteredWindow extends Thread {
+	private ExpertRegistration er;
+public RegisteredWindow(String name, ExpertRegistration er) {
+	super(name);
+	this.er = er;
+}
+
+@Override
+public void run() {
+	super.run();
+	er.register();
+}
+}
+public class HospitalRun {
+public static void main(String[] args) {
+	// TODO Auto-generated method stub
+	ExpertRegistration er = new ExpertRegistration();
+
+	RegisteredWindow rw1 = new RegisteredWindow("窗口1", er);
+	RegisteredWindow rw2 = new RegisteredWindow("窗口2", er);
+	RegisteredWindow rw3 = new RegisteredWindow("窗口3", er);
+
+	rw1.start();
+	rw2.start();
+	rw3.start();
+}
+}
+```
+
+### woker小作业
+
+```java
+public abstract class Woker {
+String name ;
+     int age ;
+     String sex ;
+     int salary ;
+     
+     public  Woker() {
+    	 System.out.println("无参");
+     }
+     public Woker(String name , int age, String sex, int salary) {
+    	 this.name = name ;
+    	 this.age = age ;
+    	 this.sex = sex ;
+    	 this.salary = salary ;
+    	 
+     }
+     public String getName() {
+    	 return name ;
+     }
+     public void setName(String name ) {
+    	 this.name = name ;
+     }
+     public int getAge() {
+    	 return age ;
+     }
+     public void setAge(int age) {
+    	 this.age = age ;
+     }
+     public String getSex() {
+    	 return sex ;
+     }
+     public void setSex(String sex) {
+    	 this.sex = sex ;
+     }
+     public int getSalary() {
+    	 return salary ;
+     }
+     public void setSalary(int salary) {
+    	 this.salary = salary ;
+     }
+     public void print() {
+    	 System.out.println("-----------");
+    	 System.out.println("姓名： "+name);
+    	 System.out.println("年龄： "+age);
+    	 System.out.println("性别： "+sex);
+    	 System.out.println("基本薪资："+salary);
+     }
+     public abstract void printIncomeFullYear(double shares );
+}
+```
+
+```java
+public abstract class Executives extends Woker{
+    private int subsidies ;
+	private String position ;
+	public  Executives(){
+	 	System.out.println("Executives的无参构造方法");
+	 	}
+	public Executives(int subsidies,String position){
+		this.subsidies = subsidies ;
+		this.position = position ;
+	}
+	public int getSubsidies() {
+		return subsidies ;
+	}
+	public void setSubsidies(int subsidies) {
+		this.subsidies = subsidies ;
+	}
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position ;
+	}
+	Executives(String name, int age ,String sex ,int salary,int subsidies,String position){
+		super(name,age,sex,salary);
+		this.position = position ;
+		this.subsidies = subsidies ;
+	}
+	 public void print() {
+		 
+		 System.out.println("-----------");
+    	 System.out.println("职位：  "+position);
+    	 System.out.println("姓名： "+name);
+    	 System.out.println("年龄： "+age);
+    	 System.out.println("性别： "+sex);
+    	 System.out.println("基本薪资："+salary);
+    	 System.out.println("行政补贴："+subsidies);
+    	 
+	 }
+	 public void printIncomebyMonth() {
+		 int Money = (salary+subsidies) ;
+		System.out.println("本月薪资为： "+Money+"元");
+		
+	 }
+}
+```
+
+```java
+public class Manager extends Woker{
+    private int shares ;
+	public  Manager(){
+	 	System.out.println("无参构造方法");
+	}
+	Manager(String name, int age ,String sex ,int salary){
+		super(name,age,sex,salary);       
+        }
+	  public void printIncomeFullYear(double shares ){		
+		    System.out.println("每月分红："+shares*2500+"(占股"+shares+"%)");	
+		    double Money = salary+shares*2500 ;
+			System.out.println("年薪为： "+Money*12+"元");
+			}
+}
+```
+
+```java
+public class WokerTest {
+    public static void main(String[] args) {
+		
+		Manager manager1 = new Manager("xxx",23,"女",3000);
+		manager1.print();
+		manager1.printIncomeFullYear(5);
+	}
+	
+}
+```
