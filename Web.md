@@ -169,5 +169,16 @@ requestDemo4
 
 ![1600842001959](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\1600842001959.png)
 
+梳理http上    所有的文件类型cookie 
 
+chrome分析网络请求udp网络直播   协议+主机+端口
 
+![1601571823179](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\1601571823179.png)
+
+Filter  （过滤）
+
+Servlet   （发送请求）
+
+Listener   （监听）
+
+![1601476801414](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\1601476801414.png)
